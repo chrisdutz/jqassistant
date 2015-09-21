@@ -108,5 +108,14 @@
         ]]></cypher>
     </constraint>
 
+    <constraint id="module:aaaa">
+        <description>AAAA</description>
+        <cypher><![CDATA[
+            MATCH
+                (a)
+            RETURN
+             a LIMIT 25
+        ]]></cypher>
+    </constraint>
 
 </jqa:jqassistant-rules>

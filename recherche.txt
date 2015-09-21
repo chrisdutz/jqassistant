@@ -1,0 +1,50 @@
+Befehl zum Testen: mvn -DskipTests -DskipITs clean install -Dmaven.javadoc.skip=true
+
+Konfiguration
+
+    <modules>
+        <module>assembly</module>
+        <module>core</module>
+        <module>plugin</module>
+        <module>scm</module>
+        <!--<module>sonar</module>-->
+        <module>examples</module>
+        <module>distribution</module>
+    </modules>
+
+
+-> SUCCESS
+
+---------------------------------
+
+Konfiguration
+
+    <modules>
+        <module>assembly</module>
+        <module>core</module>
+        <module>plugin</module>
+        <module>scm</module>
+        <!--<module>sonar</module>-->
+        <!--<module>examples</module>-->
+        <module>distribution</module>
+    </modules>
+
+
+---> FAILURE
+
+-----------------------------------
+
+Konfiguration
+
+    <modules>
+        <module>assembly</module>
+        <module>core</module>
+        <module>plugin</module>
+        <module>scm</module>
+        <module>sonar</module> <--- SONAR aktiv!
+        <!--<module>examples</module>-->
+        <module>distribution</module>
+    </modules>
+
+---> SUCCESS
+

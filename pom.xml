@@ -75,6 +75,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <com.buschmais.xo_version>0.6.0-SNAPSHOT</com.buschmais.xo_version>
+
+        <!-- This is the version of jQAssistant which we use to
+          !  validate our constrains for jQAssistant itself.
+        -->
+        <jqa.previous.version>1.0.0</jqa.previous.version>
         <maven.failsafe.version>2.18.1</maven.failsafe.version>
         <maven.compiler.version>3.3</maven.compiler.version>
         <maven.surefire.version>${maven.failsafe.version}</maven.surefire.version>
@@ -163,7 +168,7 @@
                                             <pluginExecutionFilter>
                                                 <groupId>com.buschmais.jqassistant.scm</groupId>
                                                 <artifactId>jqassistant-maven-plugin</artifactId>
-                                                <versionRange>[1.0.0,)</versionRange>
+                                                <versionRange>${jqa.previous.version}</versionRange>
                                                 <goals>
                                                     <goal>scan</goal>
                                                     <goal>analyze</goal>
@@ -288,23 +293,9 @@
                 <plugin>
                     <groupId>com.buschmais.jqassistant.scm</groupId>
                     <artifactId>jqassistant-maven-plugin</artifactId>
-                    <version>${project.version}</version>
-                    <executions>
-                        <execution>
-                            <id>scan</id>
-                            <goals>
-                                <goal>scan</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>analyze</id>
-                            <goals>
-                                <goal>analyze</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+                    <version>${jqa.previous.version}</version>
                     <configuration>
-                        <failOnViolations>false</failOnViolations>
+                        <failOnViolations>true</failOnViolations>
                         <storeLifecycle>MODULE</storeLifecycle>
                     </configuration>
                 </plugin>
@@ -568,6 +559,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.buschmais.jqassistant.scm</groupId>
+                <artifactId>jqassistant-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scan</id>
+                        <goals>
+                            <goal>scan</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>analyze</id>
+                        <goals>
+                            <goal>analyze</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
         </plugins>
     </build>
 
@@ -683,8 +693,8 @@
         <module>core</module>
         <module>plugin</module>
         <module>scm</module>
-        <module>sonar</module>
-        <module>examples</module>
+        <!--<module>sonar</module>-->
+        <!--<module>examples</module>-->
         <module>distribution</module>
     </modules>
 
