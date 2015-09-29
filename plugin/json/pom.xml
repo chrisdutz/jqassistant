@@ -27,7 +27,8 @@
                             <goal>antlr4</goal>
                         </goals>
                         <configuration>
-                        </configuration>
+                            <outputDirectory>${project.build.directory}/generated-sources/antlr4/org/jquassistant/plugin/json/parser</outputDirectory>
+                         </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -40,6 +41,12 @@
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>4.5.1-1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

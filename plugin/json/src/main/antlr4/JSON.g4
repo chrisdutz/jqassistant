@@ -5,6 +5,10 @@
 
 grammar JSON;
 
+@header {
+    package org.jqassistant.plugin.json.parser;
+}
+
 //---
 // Fragments
 //---
@@ -36,6 +40,7 @@ json:   jsonObject
 
 jsonObject
     :   '{' keyValuePair (',' keyValuePair)* '}'
+    |
     ;
 
 keyValuePair
