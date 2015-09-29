@@ -226,6 +226,7 @@
 		<module>graphml</module>
 		<module>jaxrs</module>
 		<module>javaee6</module>
+		<module>json</module>
 		<module>junit</module>
 		<module>testng</module>
 		<module>m2repo</module>
