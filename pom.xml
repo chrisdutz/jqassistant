@@ -78,6 +78,7 @@
         <maven.failsafe.version>2.18.1</maven.failsafe.version>
         <maven.compiler.version>3.3</maven.compiler.version>
         <maven.surefire.version>${maven.failsafe.version}</maven.surefire.version>
+        <org.antlr.version>4.5.1-1</org.antlr.version>
         <org.apache.maven_version>3.2.5</org.apache.maven_version>
         <org.neo4j_version>2.2.5</org.neo4j_version>
         <org.asciidoctor_version>1.5.2</org.asciidoctor_version>
@@ -230,6 +231,11 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.antlr</groupId>
+                    <artifactId>antlr4-maven-plugin</artifactId>
+                    <version>${org.antlr.version}</version>
+                </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
@@ -605,6 +611,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-runtime</artifactId>
+                <version>${org.antlr.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.buschmais.jqassistant.core</groupId>
                 <artifactId>jqassistant.core.store</artifactId>
