@@ -9,13 +9,10 @@ grammar JSON;
     package org.jqassistant.plugin.json.parser;
 }
 
-//---
-// Fragments
-//---
 
-json
+jsonDocument
     :   jsonObject
-    |   array
+    |   jsonArray
     ;
 
 
@@ -33,14 +30,14 @@ arrayElements
     :   value (',' value)*
     ;
 
-array
+jsonArray
     :   '[' ']'
     |   '[' arrayElements ']'
     |
     ;
 
 value
-    :   array
+    :   jsonArray
     |   jsonObject
     |   STRING
     |   NUMBER
@@ -83,10 +80,12 @@ NUMBER
     |   '-'? INT
     ;
 
+// Some JSON parsers support line comments
 LINE_COMMENT
     :   '//' ~[\r\n]* -> skip
     ;
 
+// Some JSON parsers support block comments
 BLOCK_COMMENT
     :   '/*' .*? '*/' -> skip
     ;
