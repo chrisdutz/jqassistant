@@ -13,6 +13,50 @@ grammar JSON;
 // Fragments
 //---
 
+json
+    :   jsonObject
+    |   array
+    ;
+
+
+jsonObject
+    :   '{' keyValuePair (',' keyValuePair)* '}'
+    |   '{' '}'
+    |
+    ;
+
+keyValuePair
+    :   STRING ':' value
+    ;
+
+arrayElements
+    :   value (',' value)*
+    ;
+
+array
+    :   '[' ']'
+    |   '[' arrayElements ']'
+    |
+    ;
+
+value
+    :   array
+    |   jsonObject
+    |   STRING
+    |   NUMBER
+    |   'true'
+    |   'false'
+    |   'null'
+    ;
+
+fragment E
+    :   [Ee] [+\-]? INT
+    ;
+
+fragment INT
+    :   '0' | [1-9] [0-9]*
+    ;
+
 fragment HEX
     :   [0-9a-fA-F]
     ;
@@ -25,7 +69,6 @@ fragment ESC
     :   '\\' (["\\/bfnrt] | UNICODE_ESCAPE_SEQ)
     ;
 
-
 STRING
     :   '"' (ESC | ~["\\])* '"'
     ;
@@ -34,21 +77,18 @@ WHITESPACE
     :   [ \t\n\r]+ -> skip
     ;
 
-json:   jsonObject
+NUMBER
+    :   '-'? INT '.' [0-9]+ E?
+    |   '-'? INT E
+    |   '-'? INT
     ;
 
-
-jsonObject
-    :   '{' keyValuePair (',' keyValuePair)* '}'
-    |
+LINE_COMMENT
+    :   '//' ~[\r\n]* -> skip
     ;
 
-keyValuePair
-    :   STRING ':' value
-    ;
-
-value
-    :   STRING
+BLOCK_COMMENT
+    :   '/*' .*? '*/' -> skip
     ;
 
 
