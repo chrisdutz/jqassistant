@@ -1,4 +1,4 @@
-package com.buschmain.jqassistant.plugin.json.impl.scanner;
+package com.buschmais.jqassistant.plugin.json.impl.scanner;
 
 import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
