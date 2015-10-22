@@ -58,13 +58,13 @@ public class JSONFileScannerPlugin extends AbstractScannerPlugin<FileResource, J
             });
 
             parser.addParseListener(new JSONParseListener(jsonFileDescriptor, scanner));
-            parser.jsonObject();
+            parser.jsonDocument();
 
             // In case the content of the file is not parseable set parsed=false
             // to help the user to identify nonparseable files
             jsonFileDescriptor.setParsed(true);
         } catch (Exception e) {
-            // @todo Logging is desired here Oliver B. Fischer, 01.10.2015
+            throw new IllegalStateException("Failed to parse the file " + item.getFile().getAbsolutePath() + ".", e);
         }
 
         return jsonFileDescriptor;

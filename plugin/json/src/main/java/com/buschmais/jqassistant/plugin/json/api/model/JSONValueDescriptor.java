@@ -8,7 +8,7 @@ import com.buschmais.xo.neo4j.api.annotation.Property;
 public interface JSONValueDescriptor<V> extends JSONDescriptor {
     @Indexed
     @Property("value")
-    V getValue();
+    Object getValue();
 
-    void setValue(V value);
+    void setValue(Object value);
 }

@@ -11,6 +11,8 @@ public interface JSONFileDescriptor extends JSONDescriptor, FileDescriptor {
     @Relation("CONTAINS_DOCUMENT")
     JSONDocumentDescriptor getDocument();
 
+    void setDocument(JSONDocumentDescriptor document);
+
     void setParsed(boolean parsable);
 
     @Property("parsed")

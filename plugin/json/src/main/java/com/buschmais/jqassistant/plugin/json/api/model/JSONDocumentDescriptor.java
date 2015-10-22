@@ -6,5 +6,7 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 @Label("Document")
 public interface JSONDocumentDescriptor extends JSONDescriptor {
     @Relation("CONTAINS")
-    <T extends JSONContainer> T getContainer();
+    JSONContainer getContainer();
+
+    void setContainer(JSONContainer jsonContainer);
 }

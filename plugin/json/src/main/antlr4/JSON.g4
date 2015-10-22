@@ -41,9 +41,8 @@ value
     |   jsonObject
     |   STRING
     |   NUMBER
-    |   'true'
-    |   'false'
-    |   'null'
+    |   BOOLEAN
+    |   NULL
     ;
 
 fragment E
@@ -66,8 +65,20 @@ fragment ESC
     :   '\\' (["\\/bfnrt] | UNICODE_ESCAPE_SEQ)
     ;
 
+NULL
+    :   'null'
+    ;
+
+BOOLEAN
+    :   ('true'|'false')
+    ;
+
+
 STRING
     :   '"' (ESC | ~["\\])* '"'
+        // Solution taken from https://theantlrguy.atlassian.net/wiki/x/HgAp
+        // See also http://stackoverflow.com/questions/33281312/
+        { setText(getText().substring(1, getText().length() - 1)); }
     ;
 
 WHITESPACE

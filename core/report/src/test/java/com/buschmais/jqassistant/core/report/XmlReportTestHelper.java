@@ -101,6 +101,21 @@ public final class XmlReportTestHelper {
             public String getValue() {
                 return "descriptorValue";
             }
+
+            @Override
+            public <I> I getId() {
+                throw new RuntimeException("Not implemented yet!");
+            }
+
+            @Override
+            public <T> T as(Class<T> type) {
+                throw new RuntimeException("Not implemented yet!");
+            }
+
+            @Override
+            public <D> D getDelegate() {
+                throw new RuntimeException("Not implemented yet!");
+            }
         });
         return row;
     }
