@@ -3,6 +3,7 @@ package com.buschmais.jqassistant.plugin.json.impl.scanner;
 import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.plugin.common.api.model.NamedDescriptor;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
+import com.buschmais.jqassistant.plugin.json.api.model.JSONArrayDescriptor;
 import com.buschmais.jqassistant.plugin.json.api.model.JSONDocumentDescriptor;
 import com.buschmais.jqassistant.plugin.json.api.model.JSONFileDescriptor;
 import com.buschmais.jqassistant.plugin.json.api.model.JSONKeyDescriptor;
@@ -167,6 +168,58 @@ public class JSONFileScannerPluginIT extends AbstractPluginIT {
         assertThat(keyDescriptorC.getName(), CoreMatchers.equalTo("C"));
         assertThat(keyDescriptorC.getValue(), Matchers.nullValue());
     }
+
+    @Test
+    public void scanReturnsEmptyArray() {
+        File jsonFile = new File(getClassesDirectory(JSONFileScannerPluginIT.class),
+                                 "/probes/valid/array-empty.json");
+
+        Scanner scanner = getScanner();
+        JSONFileDescriptor file = scanner.scan(jsonFile, jsonFile.getAbsolutePath(), null);
+
+        assertThat("Scanner must be able to scan the resource and to return a descriptor.",
+                   file, notNullValue());
+
+        assertThat(file.getFileName(), Matchers.notNullValue());
+        assertThat(file.getFileName(), endsWith("probes/valid/array-empty.json"));
+
+        assertThat(file.getDocument(), Matchers.notNullValue());
+
+        JSONDocumentDescriptor document = file.getDocument();
+
+        assertThat(document.getContainer(), Matchers.notNullValue());
+
+        JSONArrayDescriptor jsonArray = (JSONArrayDescriptor) document.getContainer();
+
+        assertThat(jsonArray.getValues(), Matchers.empty());
+    }
+
+    @Test
+    public void scanReturnsArrayWithOneValue() {
+        File jsonFile = new File(getClassesDirectory(JSONFileScannerPluginIT.class),
+                                 "/probes/valid/array-one-value.json");
+
+        Scanner scanner = getScanner();
+        JSONFileDescriptor file = scanner.scan(jsonFile, jsonFile.getAbsolutePath(), null);
+
+        assertThat("Scanner must be able to scan the resource and to return a descriptor.",
+                   file, notNullValue());
+
+        assertThat(file.getFileName(), Matchers.notNullValue());
+        assertThat(file.getFileName(), endsWith("probes/valid/array-one-value.json"));
+
+        assertThat(file.getDocument(), Matchers.notNullValue());
+
+        JSONDocumentDescriptor document = file.getDocument();
+
+        assertThat(document.getContainer(), Matchers.notNullValue());
+
+        JSONArrayDescriptor jsonArray = (JSONArrayDescriptor) document.getContainer();
+
+        assertThat(jsonArray.getValues(), hasSize(1));
+    }
+
+
 
     private JSONKeyDescriptor findKeyInDocument(List<JSONKeyDescriptor> keys, String name) {
         JSONKeyDescriptor result = null;

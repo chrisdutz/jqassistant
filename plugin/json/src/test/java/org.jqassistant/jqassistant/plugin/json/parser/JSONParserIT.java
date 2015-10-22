@@ -25,6 +25,7 @@ public class JSONParserIT {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
+             {"/probes/valid/array-empty.json"},
              {"/probes/valid/line-comment-before-object.json"},
              {"/probes/valid/line-comment-in-object.json"},
              {"/probes/valid/line-comment-after-object.json"},

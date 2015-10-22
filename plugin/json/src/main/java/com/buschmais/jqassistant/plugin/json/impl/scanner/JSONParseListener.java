@@ -83,16 +83,6 @@ public class JSONParseListener extends JSONBaseListener {
     }
 
     @Override
-    public void enterArrayElements(org.jqassistant.plugin.json.parser.JSONParser.ArrayElementsContext ctx) {
-        throw new NotImplementedException("!!!!");
-    }
-
-    @Override
-    public void exitArrayElements(org.jqassistant.plugin.json.parser.JSONParser.ArrayElementsContext ctx) {
-        throw new NotImplementedException("!!!!");
-    }
-
-    @Override
     public void enterJsonArray(org.jqassistant.plugin.json.parser.JSONParser.JsonArrayContext ctx) {
         JSONArrayDescriptor jsonArrayDescriptor = scanner.getContext()
                                                          .getStore()
@@ -110,10 +100,15 @@ public class JSONParseListener extends JSONBaseListener {
 
     @Override
     public void enterValue(org.jqassistant.plugin.json.parser.JSONParser.ValueContext ctx) {
-        JSONKeyDescriptor keyDescriptor = stack().peek().as(JSONKeyDescriptor.class);
         JSONValueDescriptor valueDescriptor = scanner.getContext().getStore().create(JSONValueDescriptor.class);
 
-        keyDescriptor.setValue(valueDescriptor);
+        JSONDescriptor keyDescriptor = stack().peek().as(JSONDescriptor.class);
+
+        if (keyDescriptor instanceof JSONKeyDescriptor) {
+            ((JSONKeyDescriptor)keyDescriptor).setValue(valueDescriptor);
+        } else {
+            ((JSONArrayDescriptor)keyDescriptor).getValues().add(valueDescriptor);
+        }
 
         stack().push(valueDescriptor);
     }
@@ -125,6 +120,7 @@ public class JSONParseListener extends JSONBaseListener {
         // Feel free to improved it! Oliver B. Fischer, 2015-10-22
         JSONValueDescriptor valueDescriptor = stack().pop().as(JSONValueDescriptor.class);
 
+        Object s1 = ctx.getStart().getText();
         TerminalNode stringNode = ctx.STRING();
         TerminalNode numberValue = ctx.NUMBER();
         TerminalNode booleanNode = ctx.BOOLEAN();
