@@ -37,8 +37,21 @@ jsonArray
     ;
 
 value
+    :   jsonArrayValue
+    |   jsonObjectValue
+    |   jsonScalarValue
+    ;
+
+jsonArrayValue
     :   jsonArray
-    |   jsonObject
+    ;
+
+jsonObjectValue
+    :   jsonObject
+    ;
+
+jsonScalarValue
+    :
     |   STRING
     |   NUMBER
     |   BOOLEAN

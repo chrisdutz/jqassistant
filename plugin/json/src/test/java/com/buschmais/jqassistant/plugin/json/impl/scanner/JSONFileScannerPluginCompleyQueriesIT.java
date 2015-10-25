@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
 
 public class JSONFileScannerPluginCompleyQueriesIT extends AbstractPluginIT {
 
@@ -66,6 +67,8 @@ public class JSONFileScannerPluginCompleyQueriesIT extends AbstractPluginIT {
                                      "RETURN f"
         ).getColumn("f");
 
+        assertThat(results, Matchers.notNullValue());
+        assertThat(results, not(Matchers.empty()));
         assertThat(results, hasSize(1));
     }
 

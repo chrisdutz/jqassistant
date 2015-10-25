@@ -8,6 +8,7 @@ import com.buschmais.jqassistant.plugin.json.api.model.JSONDocumentDescriptor;
 import com.buschmais.jqassistant.plugin.json.api.model.JSONFileDescriptor;
 import com.buschmais.jqassistant.plugin.json.api.model.JSONKeyDescriptor;
 import com.buschmais.jqassistant.plugin.json.api.model.JSONObjectDescriptor;
+import com.buschmais.jqassistant.plugin.json.api.model.JSONValueDescriptor;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
@@ -217,6 +218,39 @@ public class JSONFileScannerPluginIT extends AbstractPluginIT {
         JSONArrayDescriptor jsonArray = (JSONArrayDescriptor) document.getContainer();
 
         assertThat(jsonArray.getValues(), hasSize(1));
+
+        JSONValueDescriptor<?> valueDescriptor = jsonArray.getValues().get(0);
+
+        assertThat(valueDescriptor.getValue(), Matchers.<Object>equalTo("ABC"));
+    }
+
+    @Test
+    public void scanReturnsObjectWithEmptyArray() {
+        File jsonFile = new File(getClassesDirectory(JSONFileScannerPluginIT.class),
+                                 "/probes/valid/object-with-array-empty.json");
+
+        Scanner scanner = getScanner();
+        JSONFileDescriptor file = scanner.scan(jsonFile, jsonFile.getAbsolutePath(), null);
+
+        assertThat("Scanner must be able to scan the resource and to return a descriptor.",
+                   file, notNullValue());
+
+        assertThat(file.getFileName(), Matchers.notNullValue());
+        assertThat(file.getFileName(), endsWith("probes/valid/object-with-array-empty.json"));
+
+        assertThat(file.getDocument(), Matchers.notNullValue());
+
+        JSONDocumentDescriptor document = file.getDocument();
+
+        assertThat(document.getContainer(), Matchers.notNullValue());
+
+        JSONObjectDescriptor jsonObject = (JSONObjectDescriptor)document.getContainer();
+
+        assertThat(jsonObject.getKeys(), hasSize(1));
+
+//        JSONValueDescriptor<?> valueDescriptor = jsonObject.getValues().get(0);
+//
+//        assertThat(valueDescriptor.getValue(), Matchers.<Object>equalTo("ABC"));
     }
 
 
