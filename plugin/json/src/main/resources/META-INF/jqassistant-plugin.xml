@@ -11,6 +11,7 @@
         <class>com.buschmais.jqassistant.plugin.json.api.model.JSONObjectDescriptor</class>
         <class>com.buschmais.jqassistant.plugin.json.api.model.JSONValueDescriptor</class>
         <class>com.buschmais.jqassistant.plugin.json.api.model.JSONArrayValueDescriptor</class>
+        <class>com.buschmais.jqassistant.plugin.json.api.model.JSONObjectValueDescriptor</class>
         <class>com.buschmais.jqassistant.plugin.json.api.model.JSONScalarValueDescriptor</class>
     </model>
     <scanner>
