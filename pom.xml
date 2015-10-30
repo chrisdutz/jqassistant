@@ -3,11 +3,12 @@
 
     <groupId>com.buschmais.jqassistant</groupId>
     <artifactId>jqassistant</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0-RC2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <url>https://github.com/buschmais/jqassistant</url>
+    <name>jQAssistant</name>
     <description>Framework for structural analysis of Java applications.</description>
+    <url>https://github.com/buschmais/jqassistant</url>
 
     <organization>
         <name>buschmais GbR</name>
@@ -25,7 +26,8 @@
         <connection>scm:git:git://github.com/buschmais/jqassistant.git</connection>
         <developerConnection>scm:git:git@github.com:buschmais/jqassistant.git</developerConnection>
         <url>https://github.com/buschmais/jqassistant</url>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
 
     <repositories>
         <repository>
@@ -68,19 +70,20 @@
     </developers>
 
     <prerequisites>
-        <maven>3.0.5</maven>
+        <maven>[${maven.min.version},)</maven>
     </prerequisites>
 
     <properties>
+        <maven.min.version>3.2.5</maven.min.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <com.buschmais.xo_version>0.6.0-SNAPSHOT</com.buschmais.xo_version>
-        <maven.failsafe.version>2.18.1</maven.failsafe.version>
+        <com.buschmais.xo_version>0.6.0</com.buschmais.xo_version>
+        <maven.failsafe.version>2.19</maven.failsafe.version>
         <maven.compiler.version>3.3</maven.compiler.version>
         <maven.surefire.version>${maven.failsafe.version}</maven.surefire.version>
         <org.antlr.version>4.5.1-1</org.antlr.version>
         <org.apache.maven_version>3.2.5</org.apache.maven_version>
-        <org.neo4j_version>2.2.5</org.neo4j_version>
+        <org.neo4j_version>2.2.6</org.neo4j_version>
         <org.asciidoctor_version>1.5.2</org.asciidoctor_version>
         <org.asciidoctor-plugin.version>1.5.2.1</org.asciidoctor-plugin.version>
         <org.jruby_version>9.0.0.0</org.jruby_version>
@@ -254,7 +257,7 @@
                             <configuration>
                                 <rules>
                                     <requireMavenVersion>
-                                        <version>(3.0.5,)</version>
+                                        <version>[${maven.min.version},)</version>
                                     </requireMavenVersion>
                                     <requireJavaVersion>
                                         <version>1.8</version>
@@ -302,14 +305,9 @@
                     <version>${project.version}</version>
                     <executions>
                         <execution>
-                            <id>scan</id>
+                            <id>default</id>
                             <goals>
                                 <goal>scan</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>analyze</id>
-                            <goals>
                                 <goal>analyze</goal>
                             </goals>
                         </execution>
@@ -400,7 +398,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.6.1</version>
+                    <version>3.0.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -450,17 +448,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>2.4</version>
-                    <executions>
-                      <!-- 
-                        ! here we override the super-pom attach-sources execution id which 
-                        ! calls sources:jar goal. That goals forks the lifecycle, 
-                        ! causing the generate-sources phase to be called twice for the install goal.
-                      -->
-                      <execution>
-                        <id>attach-sources</id>
-                        <phase>DISABLE_FORKED_LIFECYCLE_MSOURCES-13</phase>
-                      </execution>
-                    </executions>
                   </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

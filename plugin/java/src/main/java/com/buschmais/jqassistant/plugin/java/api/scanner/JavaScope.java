@@ -14,24 +14,24 @@ public enum JavaScope implements Scope {
 
     CLASSPATH {
         @Override
-        public void create(ScannerContext context) {
+        public void onEnter(ScannerContext context) {
             TypeResolver typeResolver = getTypeResolver(context);
             context.peek(FileResolver.class).push(new ClassFileResolverStrategy());
             context.push(TypeResolver.class, typeResolver);
         }
 
         @Override
-        public void destroy(ScannerContext context) {
+        public void onLeave(ScannerContext context) {
             context.peek(FileResolver.class).pop();
             context.pop(TypeResolver.class);
         }
 
         private TypeResolver getTypeResolver(ScannerContext context) {
-            TypeResolver typeResolver = context.peek(TypeResolver.class);
+            TypeResolver typeResolver = context.peekOrDefault(TypeResolver.class, null);
             if (typeResolver != null) {
                 return new DelegatingTypeResolver(typeResolver);
             } else {
-                JavaArtifactFileDescriptor artifactDescriptor = context.peek(JavaArtifactFileDescriptor.class);
+                JavaArtifactFileDescriptor artifactDescriptor = context.peekOrDefault(JavaArtifactFileDescriptor.class, null);
                 if (artifactDescriptor != null) {
                     return new ClasspathScopedTypeResolver(artifactDescriptor);
                 }
@@ -64,7 +64,7 @@ public enum JavaScope implements Scope {
         }
 
         @Override
-        public Descriptor create(String path, ScannerContext context) {
+        public Descriptor match(String path, ScannerContext context) {
             if (path.toLowerCase().endsWith(CLASS_SUFFIX)) {
                 String typeName = path.substring(1, path.length() - CLASS_SUFFIX.length()).replaceAll("/", ".");
                 TypeResolver typeResolver = context.peek(TypeResolver.class);

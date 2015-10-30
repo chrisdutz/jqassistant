@@ -23,6 +23,9 @@ import com.buschmais.jqassistant.plugin.maven3.impl.scanner.artifact.DependencyC
 import com.buschmais.jqassistant.plugin.maven3.impl.scanner.artifact.ModelCoordinates;
 import com.buschmais.jqassistant.plugin.maven3.impl.scanner.artifact.ParentCoordinates;
 import com.buschmais.jqassistant.plugin.maven3.impl.scanner.artifact.PluginCoordinates;
+import com.buschmais.jqassistant.plugin.maven3.api.artifact.ArtifactResolver;
+import com.buschmais.jqassistant.plugin.maven3.api.model.*;
+import com.buschmais.jqassistant.plugin.maven3.impl.scanner.artifact.*;
 
 /**
  * Scans pom.xml files.
@@ -32,8 +35,11 @@ import com.buschmais.jqassistant.plugin.maven3.impl.scanner.artifact.PluginCoord
 @Requires(FileDescriptor.class)
 public class MavenModelScannerPlugin extends AbstractScannerPlugin<Model, MavenPomXmlDescriptor> {
 
+    private ArtifactResolver defaultArtifactResolver;
+
     @Override
     public void initialize() {
+        defaultArtifactResolver = new MavenArtifactResolver();
     }
 
     @Override
@@ -88,7 +94,7 @@ public class MavenModelScannerPlugin extends AbstractScannerPlugin<Model, MavenP
         pomXmlDescriptor.setPackaging(model.getPackaging());
         pomXmlDescriptor.setVersion(model.getVersion());
         pomXmlDescriptor.setFullQualifiedName(model.getId());
-        MavenArtifactDescriptor artifact = ArtifactResolver.resolve(new ModelCoordinates(model), MavenArtifactDescriptor.class, context);
+        MavenArtifactDescriptor artifact = getArtifactResolver(context).resolve(new ModelCoordinates(model), MavenArtifactDescriptor.class, context);
         pomXmlDescriptor.getDescribes().add(artifact);
         return pomXmlDescriptor;
     }
@@ -270,24 +276,38 @@ public class MavenModelScannerPlugin extends AbstractScannerPlugin<Model, MavenP
      * 
      * @param plugins
      *            The plugins.
-     * @param scannerContext
+     * @param context
      *            The scanner context.
      * @return The plugin descriptors.
      */
-    private List<MavenPluginDescriptor> createMavenPluginDescriptors(List<Plugin> plugins, ScannerContext scannerContext) {
-        Store store = scannerContext.getStore();
+    private List<MavenPluginDescriptor> createMavenPluginDescriptors(List<Plugin> plugins, ScannerContext context) {
+        Store store = context.getStore();
         List<MavenPluginDescriptor> pluginDescriptors = new ArrayList<>();
         for (Plugin plugin : plugins) {
             MavenPluginDescriptor mavenPluginDescriptor = store.create(MavenPluginDescriptor.class);
-            MavenArtifactDescriptor artifactDescriptor = ArtifactResolver.resolve(new PluginCoordinates(plugin), MavenArtifactDescriptor.class, scannerContext);
+            MavenArtifactDescriptor artifactDescriptor = getArtifactResolver(context).resolve(new PluginCoordinates(plugin), MavenArtifactDescriptor.class,
+                    context);
             mavenPluginDescriptor.setArtifact(artifactDescriptor);
             mavenPluginDescriptor.setInherited(plugin.isInherited());
-            addDependencies(mavenPluginDescriptor, plugin.getDependencies(), PluginDependsOnDescriptor.class, scannerContext);
+            addDependencies(mavenPluginDescriptor, plugin.getDependencies(), PluginDependsOnDescriptor.class, context);
             addPluginExecutions(mavenPluginDescriptor, plugin, store);
             addConfiguration(mavenPluginDescriptor, (Xpp3Dom) plugin.getConfiguration(), store);
             pluginDescriptors.add(mavenPluginDescriptor);
         }
         return pluginDescriptors;
+    }
+
+    /**
+     * Acquires the artifact resolver from the scanner context.
+     * 
+     * @param context
+     *            The scanner context.
+     * 
+     * @return The artifact resolver from the context or the default one if none
+     *         is available.
+     */
+    private ArtifactResolver getArtifactResolver(ScannerContext context) {
+        return context.peekOrDefault(ArtifactResolver.class, defaultArtifactResolver);
     }
 
     /**
@@ -316,13 +336,13 @@ public class MavenModelScannerPlugin extends AbstractScannerPlugin<Model, MavenP
      *            The descriptor for the current POM.
      * @param model
      *            The Maven Model.
-     * @param scannerContext
+     * @param context
      *            The scanner context.
      */
-    private void addParent(MavenPomXmlDescriptor pomDescriptor, Model model, ScannerContext scannerContext) {
+    private void addParent(MavenPomXmlDescriptor pomDescriptor, Model model, ScannerContext context) {
         Parent parent = model.getParent();
         if (null != parent) {
-            ArtifactDescriptor parentDescriptor = ArtifactResolver.resolve(new ParentCoordinates(parent), ArtifactDescriptor.class, scannerContext);
+            ArtifactDescriptor parentDescriptor = getArtifactResolver(context).resolve(new ParentCoordinates(parent), ArtifactDescriptor.class, context);
             pomDescriptor.setParent(parentDescriptor);
         }
     }
@@ -444,14 +464,13 @@ public class MavenModelScannerPlugin extends AbstractScannerPlugin<Model, MavenP
      * 
      * @param dependency
      *            Dependency.
-     * @param scannerContext
+     * @param context
      *            The scanner context.
      * @return The MavenArtifactDescriptor.
      */
-    private MavenArtifactDescriptor getMavenArtifactDescriptor(Dependency dependency, ScannerContext scannerContext) {
+    private MavenArtifactDescriptor getMavenArtifactDescriptor(Dependency dependency, ScannerContext context) {
         DependencyCoordinates coordinates = new DependencyCoordinates(dependency);
-        MavenArtifactDescriptor artifactDescriptor = ArtifactResolver.resolve(coordinates, MavenArtifactDescriptor.class,
-                scannerContext);
+        MavenArtifactDescriptor artifactDescriptor = getArtifactResolver(context).resolve(coordinates, MavenArtifactDescriptor.class, context);
         return artifactDescriptor;
     }
 

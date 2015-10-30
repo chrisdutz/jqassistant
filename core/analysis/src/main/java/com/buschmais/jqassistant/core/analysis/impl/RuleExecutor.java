@@ -5,8 +5,15 @@ import java.util.Map;
 import java.util.Set;
 
 import com.buschmais.jqassistant.core.analysis.api.AnalysisException;
+import com.buschmais.jqassistant.core.analysis.api.AnalysisListenerException;
 import com.buschmais.jqassistant.core.analysis.api.RuleSelection;
-import com.buschmais.jqassistant.core.analysis.api.rule.*;
+import com.buschmais.jqassistant.core.analysis.api.rule.Concept;
+import com.buschmais.jqassistant.core.analysis.api.rule.Constraint;
+import com.buschmais.jqassistant.core.analysis.api.rule.ExecutableRule;
+import com.buschmais.jqassistant.core.analysis.api.rule.Group;
+import com.buschmais.jqassistant.core.analysis.api.rule.RuleSet;
+import com.buschmais.jqassistant.core.analysis.api.rule.Severity;
+import com.buschmais.jqassistant.core.analysis.api.rule.Template;
 
 /**
  * Implementation of the
@@ -45,31 +52,29 @@ public class RuleExecutor {
      * 
      * @param group
      *            The group.
-     * @throws com.buschmais.jqassistant.core.analysis.api.AnalysisListenerException
+     * @throws AnalysisListenerException
      *             If the report cannot be written.
-     * @throws com.buschmais.jqassistant.core.analysis.api.AnalysisException
+     * @throws AnalysisException
      *             If the group cannot be executed.
      */
     private void executeGroup(RuleSet ruleSet, Group group) throws AnalysisException {
         if (!executedGroups.contains(group)) {
+            ruleVisitor.beforeGroup(group);
             for (String includedGroupId : group.getGroups()) {
                 Group includedGroup = resolveGroup(ruleSet, includedGroupId);
                 executeGroup(ruleSet, includedGroup);
             }
-            ruleVisitor.beforeGroup(group);
 
             Map<String, Severity> concepts = group.getConcepts();
             for (Map.Entry<String, Severity> conceptEntry : concepts.entrySet()) {
                 String conceptId = conceptEntry.getKey();
-                Severity severity = conceptEntry.getValue();
                 Concept concept = resolveConcept(ruleSet, conceptId);
-                applyConcept(ruleSet, concept, severity);
+                applyConcept(ruleSet, concept, getSeverity(conceptEntry.getValue(), concept));
             }
             for (Map.Entry<String, Severity> constraintEntry : group.getConstraints().entrySet()) {
                 String constraintId = constraintEntry.getKey();
-                Severity severity = constraintEntry.getValue();
                 Constraint constraint = resolveConstraint(ruleSet, constraintId);
-                validateConstraint(ruleSet, constraint, severity);
+                validateConstraint(ruleSet, constraint, getSeverity(constraintEntry.getValue(), constraint));
             }
 
             executedGroups.add(group);
@@ -77,14 +82,18 @@ public class RuleExecutor {
         }
     }
 
+    private Severity getSeverity(Severity severity, ExecutableRule rule) {
+        return severity != null ? severity : rule.getSeverity();
+    }
+
     /**
      * Validates the given constraint.
      * 
      * @param constraint
      *            The constraint.
-     * @throws com.buschmais.jqassistant.core.analysis.api.AnalysisListenerException
+     * @throws AnalysisListenerException
      *             If the report cannot be written.
-     * @throws com.buschmais.jqassistant.core.analysis.api.AnalysisException
+     * @throws AnalysisException
      *             If the constraint cannot be validated.
      */
     private void validateConstraint(RuleSet ruleSet, Constraint constraint, Severity severity) throws AnalysisException {
@@ -103,9 +112,9 @@ public class RuleExecutor {
      * 
      * @param concept
      *            The concept.
-     * @throws com.buschmais.jqassistant.core.analysis.api.AnalysisListenerException
+     * @throws AnalysisListenerException
      *             If the report cannot be written.
-     * @throws com.buschmais.jqassistant.core.analysis.api.AnalysisException
+     * @throws AnalysisException
      *             If the concept cannot be applied.
      */
     private void applyConcept(RuleSet ruleSet, Concept concept, Severity severity) throws AnalysisException {
