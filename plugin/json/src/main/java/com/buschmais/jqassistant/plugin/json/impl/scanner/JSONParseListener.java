@@ -1,21 +1,13 @@
 package com.buschmais.jqassistant.plugin.json.impl.scanner;
 
-import com.buschmais.jqassistant.core.scanner.api.Scanner;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONArrayDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONArrayValueDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONDocumentDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONFileDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONKeyDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONObjectDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONObjectValueDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONScalarValueDescriptor;
-import com.buschmais.jqassistant.plugin.json.api.model.JSONValueDescriptor;
+import java.util.Stack;
+
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.jqassistant.plugin.json.parser.JSONBaseListener;
 import org.jqassistant.plugin.json.parser.JSONParser;
 
-import java.util.Stack;
+import com.buschmais.jqassistant.core.scanner.api.Scanner;
+import com.buschmais.jqassistant.plugin.json.api.model.*;
 
 public class JSONParseListener extends JSONBaseListener {
 
@@ -187,19 +179,21 @@ try {
 
     @Override
     public void enterJsonArray(org.jqassistant.plugin.json.parser.JSONParser.JsonArrayContext ctx) {
-        JSONArrayDescriptor jsonArrayDescriptor = scanner.getContext()
-                                                         .getStore()
-                                                         .create(JSONArrayDescriptor.class);
+        // JSONArrayDescriptor jsonArrayDescriptor = scanner.getContext()
+        // .getStore()
+        // .create(JSONArrayDescriptor.class);
+
+        JSONArrayValueDescriptor jsonArrayDescriptor = scanner.getContext().getStore().create(JSONArrayValueDescriptor.class);
 
         JSONDescriptor jsonDescriptor = stack().peek().as(JSONDescriptor.class);
 
         if (jsonDescriptor instanceof JSONDocumentDescriptor) {
-            JSONDocumentDescriptor documentDescriptor = stack().peek().as(JSONDocumentDescriptor.class);
+            JSONDocumentDescriptor documentDescriptor = jsonDescriptor.as(JSONDocumentDescriptor.class);
             documentDescriptor.setContainer(jsonArrayDescriptor);
         } else if (jsonDescriptor instanceof JSONArrayValueDescriptor) {
-            JSONArrayValueDescriptor arrayDescriptor = stack().peek().as(JSONArrayValueDescriptor.class);
+            JSONArrayValueDescriptor arrayDescriptor = jsonDescriptor.as(JSONArrayValueDescriptor.class);
             try {
-                arrayDescriptor.setValue(jsonArrayDescriptor);
+                // arrayDescriptor.setValue(jsonArrayDescriptor);
             } catch (Exception e) {
                 System.out.println(e);
                 throw e;

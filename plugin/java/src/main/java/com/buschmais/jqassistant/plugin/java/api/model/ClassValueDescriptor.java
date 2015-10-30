@@ -6,7 +6,7 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 /**
  * Represents a class value (e.g. a referenced class).
  */
-public interface ClassValueDescriptor extends ValueDescriptor<TypeDescriptor>, ClassDescriptor {
+public interface ClassValueDescriptor extends JavaDescriptor, ValueDescriptor<TypeDescriptor>, ClassDescriptor {
 
     @Relation("IS")
     @Override

@@ -1,15 +1,13 @@
-package com.buschmais.jqassistant.plugin.common.api.model;
+package com.buschmais.jqassistant.plugin.maven3.api.model;
 
 import java.util.List;
 
+import com.buschmais.jqassistant.plugin.common.api.model.ValueDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
-/**
- * Represents an array value.
- */
 @Label("Array")
-public interface ArrayValueDescriptor extends ValueDescriptor<List<ValueDescriptor<?>>> {
+public interface MavenPropertyArrayDescriptor extends MavenDescriptor, ValueDescriptor<List<ValueDescriptor<?>>> {
 
     @Relation("CONTAINS")
     @Override
@@ -17,5 +15,4 @@ public interface ArrayValueDescriptor extends ValueDescriptor<List<ValueDescript
 
     @Override
     void setValue(List<ValueDescriptor<?>> value);
-
 }

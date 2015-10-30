@@ -6,7 +6,7 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 /**
  * Represents an enumeration value.
  */
-public interface EnumValueDescriptor extends TypedDescriptor, ValueDescriptor<FieldDescriptor>, EnumDescriptor {
+public interface EnumValueDescriptor extends JavaDescriptor, TypedDescriptor, ValueDescriptor<FieldDescriptor>, EnumDescriptor {
 
     @Relation("IS")
     @Override

@@ -1,14 +1,17 @@
 package com.buschmais.jqassistant.plugin.json.api.model;
 
+import java.util.List;
+
 import com.buschmais.xo.neo4j.api.annotation.Label;
-import com.buschmais.xo.neo4j.api.annotation.Property;
+import com.buschmais.xo.neo4j.api.annotation.Relation;
 
-@Label("Value")
-public interface JSONArrayValueDescriptor extends JSONValueDescriptor<JSONArrayDescriptor> {
+@Label("Array")
+public interface JSONArrayValueDescriptor extends JSONValueDescriptor<List<JSONValueDescriptor>>, JSONContainer {
+
+    @Relation("CONTAINS_VALUE")
+    @Override
+    List<JSONValueDescriptor> getValue();
 
     @Override
-    void setValue(JSONArrayDescriptor value);
-
-    @Override
-    JSONArrayDescriptor getValue();
+    void setValue(List<JSONValueDescriptor> value);
 }

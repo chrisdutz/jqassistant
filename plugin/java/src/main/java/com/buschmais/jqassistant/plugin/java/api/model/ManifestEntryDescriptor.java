@@ -5,7 +5,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Property;
 
 @Label("ManifestEntry")
-public interface ManifestEntryDescriptor extends ValueDescriptor<String> {
+public interface ManifestEntryDescriptor extends JavaDescriptor, ValueDescriptor<String> {
 
     /**
      * Set the value.
