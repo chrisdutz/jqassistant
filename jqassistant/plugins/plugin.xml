@@ -3,6 +3,6 @@
     <group id="plugins">
         <includeConcept refId="plugin:pluginParentProject" />
         <includeConcept refId="plugin:pluginProject" />
-
+         <includeConcept refId="report:PackageDependencies.graphml"/>
     </group>
 </jqa:jqassistant-rules>
