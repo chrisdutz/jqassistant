@@ -2,29 +2,20 @@ package com.buschmais.jqassistant.plugin.graphml.report.decorator;
 
 import com.buschmais.jqassistant.core.analysis.api.Result;
 import com.buschmais.jqassistant.core.report.api.ReportHelper;
-import com.buschmais.jqassistant.plugin.graphml.report.api.GraphMLDecorator;
 import com.buschmais.jqassistant.core.store.api.model.SubGraph;
+import com.buschmais.jqassistant.plugin.graphml.report.api.GraphMLDecorator;
 import com.buschmais.xo.api.CompositeObject;
 import org.graphstream.algorithm.APSP;
 import org.graphstream.algorithm.Toolkit;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.file.FileSink;
-import org.graphstream.stream.file.FileSinkDGS;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A GraphML decorator for yEd.
