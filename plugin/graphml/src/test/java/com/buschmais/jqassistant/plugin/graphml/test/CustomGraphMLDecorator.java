@@ -8,7 +8,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import com.buschmais.jqassistant.core.analysis.api.Result;
 import com.buschmais.jqassistant.plugin.graphml.report.api.GraphMLDecorator;
-import com.buschmais.jqassistant.plugin.graphml.report.api.SubGraph;
+import com.buschmais.jqassistant.core.store.api.model.SubGraph;
 import com.buschmais.jqassistant.plugin.graphml.report.decorator.YedGraphMLDecorator;
 import com.buschmais.xo.api.CompositeObject;
 
@@ -37,6 +37,11 @@ public class CustomGraphMLDecorator implements GraphMLDecorator {
     }
 
     @Override
+    public boolean isWriteNode(CompositeObject node) {
+        return true;
+    }
+
+    @Override
     public void writeNodeAttributes(CompositeObject node) throws XMLStreamException {
         delegate.writeNodeAttributes(node);
     }
@@ -44,6 +49,11 @@ public class CustomGraphMLDecorator implements GraphMLDecorator {
     @Override
     public void writeNodeElements(CompositeObject node) throws XMLStreamException {
         delegate.writeNodeElements(node);
+    }
+
+    @Override
+    public boolean isWriteRelationship(CompositeObject relationship) {
+        return true;
     }
 
     @Override

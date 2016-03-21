@@ -3,7 +3,7 @@ package com.buschmais.jqassistant.plugin.graphml.report.decorator;
 import com.buschmais.jqassistant.core.analysis.api.Result;
 import com.buschmais.jqassistant.core.report.api.ReportHelper;
 import com.buschmais.jqassistant.plugin.graphml.report.api.GraphMLDecorator;
-import com.buschmais.jqassistant.plugin.graphml.report.api.SubGraph;
+import com.buschmais.jqassistant.core.store.api.model.SubGraph;
 import com.buschmais.xo.api.CompositeObject;
 import org.graphstream.algorithm.APSP;
 import org.graphstream.algorithm.Toolkit;
@@ -19,6 +19,12 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A GraphML decorator for yEd.
@@ -178,6 +184,11 @@ public class YedGraphMLDecorator implements GraphMLDecorator {
     }
 
     @Override
+    public boolean isWriteNode(CompositeObject node) {
+        return true;
+    }
+
+    @Override
     public void writeNodeAttributes(CompositeObject node) throws XMLStreamException {
         if(graph != null) {
             Node graphNode = graph.getNode(node.getId().toString());
@@ -228,6 +239,11 @@ public class YedGraphMLDecorator implements GraphMLDecorator {
                 writer.writeEndElement();
             }
         }
+    }
+
+    @Override
+    public boolean isWriteRelationship(CompositeObject relationship) {
+        return true;
     }
 
     @Override
